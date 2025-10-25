@@ -9,17 +9,16 @@ interface SideMenuProps {
 }
 
 const menuItems = [
-  { icon: Home, label: 'Home', path: '/home' },
   { icon: TrendingUp, label: 'Ranking', path: '/ranking' },
   { icon: Calendar, label: 'History', path: '/history' },
-  { icon: Users, label: 'Caregiver Dashboard', path: '/caregiver', badge: 'Caregiver' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
-  { icon: FileText, label: 'Terms & Conditions', path: '/terms' },
-  { icon: Handshake, label: 'Our Partners', path: '/partners' },
+  { icon: Users, label: 'Caregiver Dashboard', path: '/caregiver', badge: 'Caregiver', conditional: true },
 ];
 
 export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
   const navigate = useNavigate();
+  
+  // Check if user has caregiver role
+  const isCaregiver = localStorage.getItem('userRole') === 'caregiver';
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -87,22 +86,27 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
 
           {/* Menu Items */}
           <nav className="flex-1 overflow-y-auto p-2">
-            {menuItems.map((item) => (
-              <Button
-                key={item.path}
-                variant="ghost"
-                className="w-full justify-start gap-3 mb-1 hover:bg-accent"
-                onClick={() => handleNavigation(item.path)}
-              >
-                <item.icon className="h-5 w-5" />
-                <span>{item.label}</span>
-                {item.badge && (
-                  <span className="ml-auto text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
-                    {item.badge}
-                  </span>
-                )}
-              </Button>
-            ))}
+            {menuItems.map((item) => {
+              // Hide conditional items if user doesn't have the role
+              if (item.conditional && !isCaregiver) return null;
+              
+              return (
+                <Button
+                  key={item.path}
+                  variant="ghost"
+                  className="w-full justify-start gap-3 mb-1 hover:bg-accent"
+                  onClick={() => handleNavigation(item.path)}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span>{item.label}</span>
+                  {item.badge && (
+                    <span className="ml-auto text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
+                      {item.badge}
+                    </span>
+                  )}
+                </Button>
+              );
+            })}
           </nav>
 
           {/* Logout */}

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/Layout/Header';
 import { SideMenu } from '@/components/Layout/SideMenu';
 import { ProgressRing } from '@/components/ui/progress-ring';
+import { ProfileCompletionModal } from '@/components/Profile/ProfileCompletionModal';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -9,6 +10,17 @@ import { Camera, Plus, Footprints, Moon, Droplets, Flame } from 'lucide-react';
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  useEffect(() => {
+    // Check if profile is complete and modal hasn't been dismissed
+    const profileComplete = localStorage.getItem('profileComplete');
+    const promptDismissed = localStorage.getItem('profilePromptDismissed');
+    
+    if (!profileComplete && !promptDismissed) {
+      setShowProfileModal(true);
+    }
+  }, []);
   const weeklyScore = 78;
 
   // Mock data
@@ -38,6 +50,10 @@ export default function Home() {
     <div className="min-h-screen bg-background pb-20">
       <Header onMenuClick={() => setMenuOpen(true)} notificationCount={3} />
       <SideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <ProfileCompletionModal 
+        open={showProfileModal} 
+        onOpenChange={setShowProfileModal} 
+      />
 
       <main className="pt-16 px-4 max-w-7xl mx-auto">
         {/* Greeting */}

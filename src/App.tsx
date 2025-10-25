@@ -11,6 +11,11 @@ import Ranking from "./pages/Ranking";
 import History from "./pages/History";
 import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
+import CaregiverDashboard from "./pages/CaregiverDashboard";
+import CaregiverPatientDetail from "./pages/CaregiverPatientDetail";
+import DoctorLogin from "./pages/DoctorLogin";
+import DoctorDashboard from "./pages/DoctorDashboard";
+import DoctorPatientDetail from "./pages/DoctorPatientDetail";
 
 const queryClient = new QueryClient();
 
@@ -28,9 +33,13 @@ const App = () => (
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/history" element={<History />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/caregiver" element={<CaregiverDashboard />} />
+          <Route path="/caregiver/patient/:id" element={<CaregiverPatientDetail />} />
+          <Route path="/doctor/login" element={<DoctorLogin />} />
+          <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+          <Route path="/doctor/patient/:id" element={<DoctorPatientDetail />} />
           <Route path="/profile" element={<Navigate to="/home" replace />} />
           <Route path="/settings" element={<Navigate to="/home" replace />} />
-          <Route path="/caregiver" element={<Navigate to="/home" replace />} />
           <Route path="/terms" element={<Navigate to="/home" replace />} />
           <Route path="/partners" element={<Navigate to="/home" replace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
