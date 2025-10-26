@@ -22,6 +22,53 @@ npm i
 npm run dev
 ```
 
+## Local setup after cloning
+
+After you clone the repository, follow these additional setup steps to get the project running locally:
+
+1. Change into the project folder (if you didn't already):
+
+	```sh
+	cd <YOUR_PROJECT_NAME>
+	```
+
+2. Make sure you have Node.js installed (recommended: Node 18 or newer). Use a version manager such as nvm or n for easy switching.
+
+3. If the app requires environment variables, create a `.env` file in the project root and add any required keys (your backend URL, API keys, etc.).
+
+4. Install dependencies:
+
+	```sh
+	npm install
+	```
+
+5. Start the development server (hot-reload):
+
+	```sh
+	npm run dev
+	```
+
+6. Build for production:
+
+	```sh
+	npm run build
+	```
+
+7. Preview the production build locally:
+
+	```sh
+	npm run preview
+	```
+
+8. Lint the codebase:
+
+	```sh
+	npm run lint
+	```
+
+These scripts are defined in `package.json`: `dev`, `build`, `build:dev`, `preview`, and `lint`.
+
+
 **Edit a file directly in GitHub**
 
 - Navigate to the desired file(s).
@@ -45,5 +92,6 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+
 
 
