@@ -7,11 +7,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { Header } from "@/components/Layout/Header";
 import { SideMenu } from "@/components/Layout/SideMenu";
 import { StepIndicator } from '@/components/Profile/StepIndicator';
-import PersonalInfoStep from "@/components/profile/PersonalInfoStep";
-import HealthInfoStep from "@/components/profile/HealthInfoStep";
-import DailyHabitsStep from "@/components/profile/DailyHabitsStep";
-import DeviceLinkingStep from "@/components/profile/DeviceLinkingStep";
-import ReviewStep from "@/components/profile/ReviewStep";
+import { PersonalInfoStep } from '@/components/Profile/PersonalInfoStep';
+import { HealthInfoStep } from "@/components/Profile/HealthInfoStep";
+import { DailyHabitsStep } from "@/components/Profile/DailyHabitsStep";
+import { DeviceLinkingStep } from "@/components/Profile/DeviceLinkingStep";
+import { ReviewStep }from "@/components/Profile/ReviewStep";
 
 type ProfileForm = {
   // Step 1
