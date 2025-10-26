@@ -6,7 +6,7 @@ import { ProfileCompletionModal } from '@/components/Profile/ProfileCompletionMo
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Camera, Plus, Footprints, Moon, Droplets, Flame } from 'lucide-react';
+import { Camera, Plus, Footprints, Moon, Droplets, Flame, Upload, X } from 'lucide-react';
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,6 +15,77 @@ export default function Home() {
   // We will use a single, site-provided welcome avatar for all users.
   // Place the image at `public/welcome-avatar.png` so it is served statically.
   const [avatarSrc, setAvatarSrc] = useState<string>('/welcome-avatar.png');
+  
+  // Food analysis state
+  const [analyzingFood, setAnalyzingFood] = useState<string | null>(null); // which meal is being analyzed
+  const [mealAnalysisResults, setMealAnalysisResults] = useState<{[key: string]: {image: string, analysis: unknown}}>({});
+
+  // AI Food Analysis Function
+  async function analyzeFoodImage(file: File) {
+    const formData = new FormData();
+    formData.append("data", file); // 'data' is the default Gradio input key
+
+    try {
+      const response = await fetch("https://huggingface.co/spaces/blip-cmd/calorie-tracker-api/api/predict", {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) throw new Error("API error");
+
+      const result = await response.json();
+      console.log("Nutrition breakdown:", result);
+      return result;
+    } catch (error) {
+      console.error("Failed to analyze image:", error);
+      return null;
+    }
+  }
+
+  // Handle file selection for meal analysis
+  const handleMealImageUpload = async (mealName: string, file: File) => {
+    setAnalyzingFood(mealName);
+    
+    // Create image URL for display
+    const imageUrl = URL.createObjectURL(file);
+    
+    try {
+      // Analyze the food image
+      const analysisResult = await analyzeFoodImage(file);
+      
+      if (analysisResult) {
+        // Store the image and analysis result
+        setMealAnalysisResults(prev => ({
+          ...prev,
+          [mealName]: {
+            image: imageUrl,
+            analysis: analysisResult
+          }
+        }));
+      }
+    } catch (error) {
+      console.error("Error analyzing food:", error);
+    } finally {
+      setAnalyzingFood(null);
+    }
+  };
+
+  // Trigger file input for meal
+  const triggerFileInput = (mealName: string) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment'; // Use camera if available
+    
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        handleMealImageUpload(mealName, file);
+      }
+    };
+    
+    input.click();
+  };
 
   useEffect(() => {
     // First, check auth user object in localStorage
@@ -72,11 +143,11 @@ export default function Home() {
     calories: 420,
   };
 
-  const meals = [
-    { name: 'Breakfast', time: '8:00 AM', logged: false },
-    { name: 'Lunch', time: '1:00 PM', logged: false },
-    { name: 'Dinner', time: '7:00 PM', logged: false },
-  ];
+  const [meals] = useState([
+    { name: 'Breakfast', time: '8:00 AM' },
+    { name: 'Lunch', time: '1:00 PM' },
+    { name: 'Dinner', time: '7:00 PM' },
+  ]);
 
   const getScoreMessage = (score: number) => {
     if (score >= 80) return { text: 'Excellent! Keep it up!', emoji: '🎉' };
@@ -222,33 +293,93 @@ export default function Home() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4">Today's Meals</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {meals.map((meal, index) => (
-              <Card 
-                key={meal.name} 
-                className="p-4 shadow-sm hover:shadow-md transition-shadow animate-fade-slide-up"
-                style={{ animationDelay: `${400 + index * 50}ms` }}
-              >
-                {!meal.logged ? (
-                  <div className="flex flex-col items-center justify-center py-6 border-2 border-dashed border-muted rounded-lg">
-                    <Camera className="h-8 w-8 text-muted-foreground mb-2" />
-                    <h3 className="font-semibold mb-1">{meal.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">{meal.time}</p>
-                    <Button size="sm" variant="default">
-                      <Camera className="h-4 w-4 mr-2" />
-                      Add {meal.name}
-                    </Button>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="aspect-video bg-muted rounded-lg mb-3" />
-                    <h3 className="font-semibold">{meal.name}</h3>
-                    <Button variant="link" size="sm" className="p-0 h-auto">
-                      View Details
-                    </Button>
-                  </div>
-                )}
-              </Card>
-            ))}
+            {meals.map((meal, index) => {
+              const mealData = mealAnalysisResults[meal.name];
+              const isAnalyzing = analyzingFood === meal.name;
+              
+              return (
+                <Card 
+                  key={meal.name} 
+                  className="p-4 shadow-sm hover:shadow-md transition-shadow animate-fade-slide-up"
+                  style={{ animationDelay: `${400 + index * 50}ms` }}
+                >
+                  {!mealData && !isAnalyzing ? (
+                    <div className="flex flex-col items-center justify-center py-6 border-2 border-dashed border-muted rounded-lg">
+                      <Camera className="h-8 w-8 text-muted-foreground mb-2" />
+                      <h3 className="font-semibold mb-1">{meal.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-3">{meal.time}</p>
+                      <Button 
+                        size="sm" 
+                        variant="default"
+                        onClick={() => triggerFileInput(meal.name)}
+                        disabled={isAnalyzing}
+                      >
+                        <Camera className="h-4 w-4 mr-2" />
+                        Add {meal.name}
+                      </Button>
+                    </div>
+                  ) : isAnalyzing ? (
+                    <div className="flex flex-col items-center justify-center py-6">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+                      <h3 className="font-semibold mb-1">{meal.name}</h3>
+                      <p className="text-sm text-muted-foreground">Analyzing food...</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="mb-3">
+                        <img 
+                          src={mealData.image} 
+                          alt={`${meal.name} photo`}
+                          className="w-full aspect-video object-cover rounded-lg"
+                        />
+                      </div>
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="font-semibold">{meal.name}</h3>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setMealAnalysisResults(prev => {
+                              const newResults = { ...prev };
+                              delete newResults[meal.name];
+                              return newResults;
+                            });
+                            URL.revokeObjectURL(mealData.image);
+                          }}
+                          className="h-6 w-6 p-0"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      
+                      {/* Nutrition Analysis Results */}
+                      <div className="bg-muted/50 rounded-lg p-3 mt-2">
+                        <h4 className="text-sm font-medium mb-2">Nutrition Analysis</h4>
+                        <div className="text-xs space-y-1">
+                          {mealData.analysis && typeof mealData.analysis === 'object' ? (
+                            <pre className="whitespace-pre-wrap text-xs bg-background rounded p-2 overflow-x-auto">
+                              {JSON.stringify(mealData.analysis, null, 2)}
+                            </pre>
+                          ) : (
+                            <p className="text-muted-foreground">Analysis data available in console</p>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full mt-2"
+                        onClick={() => triggerFileInput(meal.name)}
+                      >
+                        <Upload className="h-4 w-4 mr-2" />
+                        Update Photo
+                      </Button>
+                    </div>
+                  )}
+                </Card>
+              );
+            })}
           </div>
         </section>
       </main>
