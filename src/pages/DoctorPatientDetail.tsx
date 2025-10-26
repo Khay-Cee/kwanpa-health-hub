@@ -65,12 +65,13 @@ const DoctorPatientDetail = () => {
       {/* Header */}
       <header className="border-b bg-background sticky top-0 z-50">
         <div className="container mx-auto px-4">
-          <div className="flex items-center h-16">
-            <Button variant="ghost" onClick={() => navigate('/doctor/dashboard')}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Patients
-            </Button>
-          </div>
+          <div className="flex items-center h-16 gap-3">
+              <img src="/logoo.jpg" alt="logo" className="w-6 h-6 object-contain" />
+              <Button variant="ghost" onClick={() => navigate('/doctor/dashboard')}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Patients
+              </Button>
+            </div>
         </div>
       </header>
 

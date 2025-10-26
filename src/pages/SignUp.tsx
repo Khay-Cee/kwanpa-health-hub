@@ -51,23 +51,53 @@ export default function SignUp() {
       alert('Passwords do not match');
       return;
     }
-    // TODO: Implement actual signup logic
+    // Persist basic auth/user data so Home can decide to show profile prompt
+    const initialUser = {
+      email: formData.email,
+      profileCompleted: false,
+      profileData: null,
+      createdAt: new Date().toISOString(),
+    };
+    try {
+      localStorage.setItem('user', JSON.stringify(initialUser));
+    } catch (e) {
+      console.warn('Failed to persist user to localStorage', e);
+    }
+
+    // TODO: Implement actual signup logic (API)
     navigate('/home');
   };
 
   const handleSocialSignup = (provider: string) => {
     // TODO: Implement social signup
     console.log(`Sign up with ${provider}`);
+    // For social signup flows we persist a basic user object
+    const socialUser = {
+      email: '', // provider flows would return email
+      profileCompleted: false,
+      profileData: null,
+      createdAt: new Date().toISOString(),
+      socialProvider: provider,
+    };
+    try {
+      localStorage.setItem('user', JSON.stringify(socialUser));
+    } catch (e) {
+      console.warn('Failed to persist social user', e);
+    }
     navigate('/home');
   };
 
   return (
     <div className="min-h-screen bg-gradient-health-subtle flex items-center justify-center p-4">
       <Card className="w-full max-w-md p-8 shadow-lg animate-scale-in">
-        {/* Logo */}
+        {/* Logo: use shared welcome image in a square area (no border) */}
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-gradient-health rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-md">
-            K
+          <div className="w-16 h-16 flex items-center justify-center bg-transparent">
+            <img
+              src="/welcome-avatar.png"
+              alt="Welcome avatar"
+              className="w-16 h-16 object-cover"
+            />
           </div>
         </div>
 

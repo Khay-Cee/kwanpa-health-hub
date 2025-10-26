@@ -1,24 +1,10 @@
-# Welcome to your Lovable project
+# Kwanpa
+A smart health monitoring app
+## About Kwanpa
+Kwanpa is a smart health management system that enables users to track, manage, and improve their daily lifestyle habits. The system integrates with existing IoT-based health platforms, such as the Apple Health app or smart watch, to automatically collect real-time data including steps, sleep patterns, calories, and other vital health metrics. 
 
-## Project info
+By combining this data with user-inputted lifestyle routines, the app generates personalized reminders, interactive health dashboards, and progress insights in a user-friendly manner. These insights are accessible not only to the user but also through a simplified dashboard for the user’s caregiver(s) and doctors, allowing them to monitor wellbeing and provide timely interventions - ultimately reducing emergency and referral cases in the long run. 
 
-**URL**: https://lovable.dev/projects/c5785992-4951-4688-b51f-dc4314f473dc
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/c5785992-4951-4688-b51f-dc4314f473dc) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
 Follow these steps:
 
@@ -60,14 +46,4 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/c5785992-4951-4688-b51f-dc4314f473dc) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

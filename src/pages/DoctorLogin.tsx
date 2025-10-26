@@ -5,6 +5,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Stethoscope, Eye, EyeOff, Lock } from 'lucide-react';
+import { saveDoctor } from '@/lib/doctorAuth';
+
+// Mock doctor credentials for local testing
+const DOCTOR_CREDENTIALS = [
+  { id: 'DOC-2024-001', password: 'Password123!', name: 'Dr. Sarah Mensah' },
+  { id: 'DOC-2024-002', password: 'Password123!', name: 'Dr. Kojo Antwi' },
+];
 
 const DoctorLogin = () => {
   const [doctorId, setDoctorId] = useState('');
@@ -14,7 +21,31 @@ const DoctorLogin = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual authentication
+    // Simple, local mock authentication
+    const found = DOCTOR_CREDENTIALS.find(
+      (d) => d.id.toUpperCase() === doctorId.trim().toUpperCase() && d.password === password
+    );
+
+    if (!found) {
+      // replace with a nicer UI message if needed
+      alert('Invalid Doctor ID or password.');
+      return;
+    }
+
+    // Persist doctor auth separately from regular user
+    const doctorAuth = {
+      doctorId: found.id,
+      name: found.name,
+      authenticated: true,
+      loggedInAt: new Date().toISOString(),
+    };
+
+    try {
+      saveDoctor(doctorAuth);
+    } catch (e) {
+      console.warn('Failed to save doctor auth', e);
+    }
+
     navigate('/doctor/dashboard');
   };
 
@@ -24,8 +55,8 @@ const DoctorLogin = () => {
         <div className="p-8">
           {/* Medical Icon */}
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <Stethoscope className="h-8 w-8 text-primary" />
+            <div className="w-16 h-16 flex items-center justify-center overflow-hidden">
+              <img src="/logoo.jpg" alt="Kwanpa logo" className="w-12 h-12 object-contain" />
             </div>
           </div>
 

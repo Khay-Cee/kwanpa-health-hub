@@ -31,10 +31,14 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gradient-health-subtle flex items-center justify-center p-4">
       <Card className="w-full max-w-md p-8 shadow-lg animate-scale-in">
-        {/* Logo */}
+        {/* Logo: use shared welcome image in a square area (no border) */}
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-gradient-health rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-md">
-            K
+          <div className="w-16 h-16 flex items-center justify-center bg-transparent">
+            <img
+              src="/welcome-avatar.png"
+              alt="Welcome avatar"
+              className="w-16 h-16 object-cover"
+            />
           </div>
         </div>
 

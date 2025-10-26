@@ -14,14 +14,13 @@ export const Header = ({ onMenuClick, notificationCount = 0 }: HeaderProps) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
-        {/* Logo */}
+        {/* Logo (use site favicon/logo placed in public/favicon.svg) */}
         <button
           onClick={() => navigate('/home')}
           className="flex items-center gap-2 text-xl font-bold text-primary hover:text-primary-dark transition-colors"
         >
-          <div className="w-8 h-8 bg-gradient-health rounded-lg flex items-center justify-center text-white text-sm font-bold">
-            K
-          </div>
+          {/* use the provided JPG favicon as the header logo (no rounded border for clarity) */}
+          <img src="/logoo.jpg" alt="Kwanpa logo" className="w-8 h-8 object-contain" />
           <span>Kwanpa</span>
         </button>
 

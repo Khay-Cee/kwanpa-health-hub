@@ -80,6 +80,31 @@ All colors MUST be HSL.
   }
 }
 
+/* Increase horizontal spacing for main container across the app: 40-60px comfortable gutters */
+@layer base {
+  .container {
+    /* default ~40px */
+    padding-left: 2.5rem; /* 40px */
+    padding-right: 2.5rem; /* 40px */
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      /* ~48px */
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      /* ~60px */
+      padding-left: 3.75rem; /* 60px */
+      padding-right: 3.75rem; /* 60px */
+    }
+  }
+}
+
 @layer utilities {
   /* Health gradient utilities */
   .gradient-health {

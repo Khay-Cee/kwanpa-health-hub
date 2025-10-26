@@ -11,14 +11,55 @@ import { Camera, Plus, Footprints, Moon, Droplets, Flame } from 'lucide-react';
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  // We will use a single, site-provided welcome avatar for all users.
+  // Place the image at `public/welcome-avatar.png` so it is served statically.
+  const [avatarSrc, setAvatarSrc] = useState<string>('/welcome-avatar.png');
 
   useEffect(() => {
-    // Check if profile is complete and modal hasn't been dismissed
+    // First, check auth user object in localStorage
+    try {
+      const rawUser = localStorage.getItem('user');
+      if (rawUser) {
+        const user = JSON.parse(rawUser);
+        if (user?.profileCompleted === false) {
+          setShowProfileModal(true);
+        }
+
+        const fullName = user?.profileData?.fullName || user?.profileData?.fullname || user?.profileData?.name;
+  // Ignore per-user avatar and always show the shared welcome avatar.
+  // If you'd like to prefer user avatars, remove this override.
+  setAvatarSrc('/welcome-avatar.png');
+        if (fullName) {
+          const firstName = String(fullName).trim().split(' ')[0];
+          setDisplayName(firstName || fullName);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to parse user from storage', e);
+    }
+
+    // Backwards-compatible fallback: legacy keys
     const profileComplete = localStorage.getItem('profileComplete');
     const promptDismissed = localStorage.getItem('profilePromptDismissed');
-    
     if (!profileComplete && !promptDismissed) {
       setShowProfileModal(true);
+    }
+
+    // Legacy profile key for displayName fallback
+    try {
+      const raw = localStorage.getItem('profile');
+      if (raw) {
+        const profile = JSON.parse(raw);
+        const fullName = (profile.fullName || profile.fullname || profile.name) as string | undefined;
+        if (fullName) {
+          const firstName = fullName.trim().split(' ')[0];
+          setDisplayName(firstName || fullName);
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to parse profile from storage', e);
     }
   }, []);
   const weeklyScore = 78;
@@ -58,15 +99,30 @@ export default function Home() {
       <main className="pt-16 px-4 max-w-7xl mx-auto">
         {/* Greeting */}
         <section className="py-6 animate-fade-slide-up">
-          <h1 className="text-3xl font-bold mb-2">
-            Welcome, User! 👋
-          </h1>
-          <p className="text-muted-foreground">
-            Hope you're doing well today. Check in for your weekly progress.
-          </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-          </p>
+          <div className="flex items-center gap-4">
+            {/* Left bold avatar */}
+            <div>
+              {/* Prefer profile avatar if present, otherwise show the provided welcome image from /welcome-avatar.png */}
+              {/* Always show the shared welcome avatar with no border */}
+              <img
+                src={avatarSrc}
+                alt={displayName ? `${displayName}'s avatar` : 'Welcome avatar'}
+                className="h-20 w-20 rounded-full object-cover"
+              />
+            </div>
+
+            <div>
+              <h1 className="text-3xl font-bold mb-2">
+                {displayName ? `Welcome, ${displayName}! 👋` : 'Welcome, User! 👋'}
+              </h1>
+              <p className="text-muted-foreground">
+                Hope you're doing well today. Check in for your weekly progress.
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Weekly Progress */}

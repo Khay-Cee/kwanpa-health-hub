@@ -7,8 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { 
   Search, Bell, MessageSquare, User, ChevronDown, 
-  AlertTriangle, TrendingUp, Calendar, Activity 
+  AlertTriangle, TrendingUp, Calendar, Activity
 } from 'lucide-react';
+import DoctorHeader from '@/components/doctor/DoctorHeader';
 
 const mockPatients = [
   {
@@ -94,7 +95,8 @@ const DoctorDashboard = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold">🏥 Kwanpa | Doctor Portal</h1>
+              <img src="/logoo.jpg" alt="logo" className="w-6 h-6 object-contain" />
+              <h1 className="text-xl font-bold">Kwanpa | Doctor Portal</h1>
             </div>
             <div className="flex items-center gap-4">
               <div className="relative hidden md:block">
@@ -117,11 +119,9 @@ const DoctorDashboard = () => {
               <Button variant="ghost" size="icon">
                 <MessageSquare className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" className="gap-2">
-                <User className="h-5 w-5" />
-                <span className="hidden md:inline">Dr. Mensah</span>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
+
+              {/* Doctor header shows name, id and dropdown */}
+              <DoctorHeader />
             </div>
           </div>
         </div>
