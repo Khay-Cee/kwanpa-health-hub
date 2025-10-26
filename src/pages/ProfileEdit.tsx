@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import ProfileSection from "@/components/profile/ProfileSection";
-import DeviceCard from "@/components/profile/DeviceCard";
+import ProfileSection from "@/components/Profile/ProfileSection";
+import DeviceCard from "@/components/Profile/DeviceCard";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
