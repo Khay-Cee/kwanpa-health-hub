@@ -23,10 +23,10 @@ export default function Home() {
   // AI Food Analysis Function
   async function analyzeFoodImage(file: File) {
     const formData = new FormData();
-    formData.append("data", file); // 'data' is the default Gradio input key
+    formData.append("file", file);
 
     try {
-      const response = await fetch("https://huggingface.co/spaces/blip-cmd/calorie-tracker-api/api/predict", {
+      const response = await fetch("https://huggingface.co/spaces/blip-cmd/calorie-tracker-api/predict", {
         method: "POST",
         body: formData
       });
