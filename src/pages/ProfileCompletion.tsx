@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Header } from "@/components/Layout/Header";
 import { SideMenu } from "@/components/Layout/SideMenu";
-import StepIndicator from "@/components/profile/StepIndicator";
+import { StepIndicator } from '@/components/Profile/StepIndicator';
 import PersonalInfoStep from "@/components/profile/PersonalInfoStep";
 import HealthInfoStep from "@/components/profile/HealthInfoStep";
 import DailyHabitsStep from "@/components/profile/DailyHabitsStep";
